@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Build bilingual storefront and catalog
-- [ ] Build custom sourcing request flow
-- [ ] Build unified cart and WhatsApp handoff
-- [ ] Add contact/footer and metadata
-- [ ] Verify desktop and mobile interactions
+- [x] Build bilingual storefront and catalog
+- [x] Build custom sourcing request flow
+- [x] Build unified cart and WhatsApp handoff
+- [x] Add contact/footer and metadata
+- [x] Verify desktop and mobile interactions
