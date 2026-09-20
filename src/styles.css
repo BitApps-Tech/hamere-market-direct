@@ -19,6 +19,8 @@
  */
 
 @theme inline {
+  --font-sans: "Manrope", "Noto Sans SC", sans-serif;
+  --font-display: "Manrope", "Noto Sans SC", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -59,29 +61,42 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-cream-deep: var(--cream-deep);
+  --color-ink-soft: var(--ink-soft);
+  --color-jade: var(--jade);
+  --color-jade-foreground: var(--jade-foreground);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-gold: var(--gold);
+  --shadow-market: 0 22px 70px -36px color-mix(in oklab, var(--foreground) 32%, transparent);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --radius: 0.4rem;
+  --background: oklch(0.982 0.008 77);
+  --foreground: oklch(0.19 0.01 65);
+  --card: oklch(0.995 0.004 78);
+  --card-foreground: oklch(0.19 0.01 65);
+  --popover: oklch(0.995 0.004 78);
+  --popover-foreground: oklch(0.19 0.01 65);
+  --primary: oklch(0.39 0.151 27);
+  --primary-foreground: oklch(0.98 0.01 80);
+  --secondary: oklch(0.94 0.018 75);
+  --secondary-foreground: oklch(0.27 0.015 55);
+  --muted: oklch(0.95 0.012 74);
+  --muted-foreground: oklch(0.48 0.02 55);
+  --accent: oklch(0.91 0.035 72);
+  --accent-foreground: oklch(0.33 0.08 30);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.87 0.023 70);
+  --input: oklch(0.87 0.023 70);
+  --ring: oklch(0.39 0.151 27);
+  --cream-deep: oklch(0.92 0.025 75);
+  --ink-soft: oklch(0.31 0.015 62);
+  --jade: oklch(0.4 0.104 137);
+  --jade-foreground: oklch(0.98 0.01 80);
+  --hero-foreground: oklch(0.98 0.01 80);
+  --gold: oklch(0.72 0.09 78);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +155,37 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+    margin: 0;
+    text-rendering: optimizeLegibility;
   }
+
+  button, a, input, select, textarea { letter-spacing: 0; }
+  ::selection { background: color-mix(in oklab, var(--primary) 22%, transparent); }
+}
+
+@utility market-grid {
+  background-image: linear-gradient(to right, color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+@utility hero-shade {
+  background: linear-gradient(90deg, color-mix(in oklab, var(--foreground) 92%, transparent) 0%, color-mix(in oklab, var(--foreground) 68%, transparent) 42%, transparent 72%);
+}
+
+@utility glass-nav {
+  background: color-mix(in oklab, var(--background) 88%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility reveal-up { animation: reveal-up .65s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
