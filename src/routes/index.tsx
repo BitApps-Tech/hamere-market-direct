@@ -421,10 +421,12 @@ function MarketPage() {
   };
 
   const whatsappUrl = useMemo(() => {
-    const selected = products.filter((p) => cart[p.id]).map((p) => {
-      const quantity = cart[p.id] ?? 0;
-      return `• ${p.en} / ${p.zh} × ${quantity} — ETB ${(p.price * quantity).toLocaleString()}`;
-    });
+    const selected = products
+      .filter((p) => cart[p.id])
+      .map((p) => {
+        const quantity = cart[p.id] ?? 0;
+        return `• ${p.en} / ${p.zh} × ${quantity} — ETB ${(p.price * quantity).toLocaleString()}`;
+      });
     const sourced = requests.map(
       (r) =>
         `• ${r.item} — ${r.quantity} ${r.unit}${r.notes ? ` (${r.notes})` : ""}${r.imageName ? ` [Photo: ${r.imageName}]` : ""}`,
@@ -972,7 +974,8 @@ function MarketPage() {
                                 </div>
                               </div>
                               <p className="text-sm font-bold">
-                                {t.birr} {(product.price * (cart[product.id] ?? 0)).toLocaleString()}
+                                {t.birr}{" "}
+                                {(product.price * (cart[product.id] ?? 0)).toLocaleString()}
                               </p>
                             </div>
                           ))}
