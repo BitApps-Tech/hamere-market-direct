@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { ProductCard } from "@/components/product-card";
+import { SiteCredit } from "@/components/site-credit";
 import { Button } from "@/components/ui/button";
 import {
   categoryKeys,
@@ -171,7 +172,7 @@ function ProductsPage() {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground">
       <header className="glass-nav fixed inset-x-0 top-0 z-40 border-b border-border/70">
         <div className="mx-auto flex h-18 max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <Link to="/" className="group flex items-center gap-3 text-left" aria-label="Hamere Asian Market home">
@@ -269,7 +270,7 @@ function ProductsPage() {
         )}
       </header>
 
-      <main className="pt-18">
+      <main className="flex-1 pt-18">
         <section className="px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
           <div className="mx-auto max-w-[1440px]">
             <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
@@ -386,6 +387,13 @@ function ProductsPage() {
           </div>
         </section>
       </main>
+
+      <footer className="bg-foreground px-5 py-6 text-background sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1440px] flex-col justify-between gap-3 text-[10px] font-semibold text-background/45 sm:flex-row sm:items-center">
+          <span className="uppercase">© 2026 Hamere Asian Market</span>
+          <SiteCredit lang={lang} />
+        </div>
+      </footer>
 
       {notice && (
         <div

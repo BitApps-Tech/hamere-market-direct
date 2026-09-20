@@ -22,6 +22,7 @@ import {
 
 import heroImage from "@/assets/hamere-market-hero.jpg";
 import { ProductCard } from "@/components/product-card";
+import { SiteCredit } from "@/components/site-credit";
 import { Button } from "@/components/ui/button";
 import {
   categoryKeys,
@@ -759,8 +760,9 @@ function MarketPage() {
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col justify-between gap-3 pt-6 text-[10px] font-semibold uppercase text-background/45 sm:flex-row">
+            <div className="flex flex-col justify-between gap-3 pt-6 text-[10px] font-semibold uppercase text-background/45 sm:flex-row sm:items-center">
               <span>© 2026 Hamere Asian Market</span>
+              <SiteCredit lang={lang} className="normal-case" />
               <span>亚裔美馔 · 专属采买</span>
             </div>
           </div>
