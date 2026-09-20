@@ -421,12 +421,10 @@ function MarketPage() {
   };
 
   const whatsappUrl = useMemo(() => {
-    const selected = products
-      .filter((p) => cart[p.id])
-      .map(
-        (p) =>
-          `• ${p.en} / ${p.zh} × ${cart[p.id]} — ETB ${(p.price * cart[p.id]).toLocaleString()}`,
-      );
+    const selected = products.filter((p) => cart[p.id]).map((p) => {
+      const quantity = cart[p.id] ?? 0;
+      return `• ${p.en} / ${p.zh} × ${quantity} — ETB ${(p.price * quantity).toLocaleString()}`;
+    });
     const sourced = requests.map(
       (r) =>
         `• ${r.item} — ${r.quantity} ${r.unit}${r.notes ? ` (${r.notes})` : ""}${r.imageName ? ` [Photo: ${r.imageName}]` : ""}`,
@@ -476,7 +474,10 @@ function MarketPage() {
               <button
                 key={label}
                 type="button"
-                onClick={() => scrollTo(navTargets[index])}
+                onClick={() => {
+                  const target = navTargets[index];
+                  if (target) scrollTo(target);
+                }}
                 className="text-xs font-bold uppercase text-ink-soft transition-colors hover:text-primary"
               >
                 {label}
@@ -535,7 +536,10 @@ function MarketPage() {
               <button
                 key={label}
                 type="button"
-                onClick={() => scrollTo(navTargets[index])}
+                onClick={() => {
+                  const target = navTargets[index];
+                  if (target) scrollTo(target);
+                }}
                 className="flex w-full items-center justify-between border-b border-border py-3 text-left text-sm font-semibold last:border-0"
               >
                 {label}
@@ -590,10 +594,10 @@ function MarketPage() {
           <div className="absolute inset-x-0 bottom-0 z-10 border-t border-hero-foreground/20 bg-foreground/55 text-hero-foreground backdrop-blur-md">
             <div className="mx-auto grid max-w-[1440px] grid-cols-1 divide-y divide-hero-foreground/15 px-5 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-8 lg:px-12">
               {[
-                [MapPin, t.delivery],
-                [PackageCheck, t.direct],
-                [Globe2, t.bilingual],
-              ].map(([Icon, label]) => (
+                { Icon: MapPin, label: t.delivery },
+                { Icon: PackageCheck, label: t.direct },
+                { Icon: Globe2, label: t.bilingual },
+              ].map(({ Icon, label }) => (
                 <div
                   key={String(label)}
                   className="flex items-center gap-3 py-4 sm:px-6 sm:first:pl-0"
@@ -724,19 +728,15 @@ function MarketPage() {
               </p>
               <div className="mt-8 space-y-4">
                 {[
-                  "Send any reference",
-                  "We verify exact packaging",
-                  "Receive one combined quote",
-                ].map((text, index) => (
-                  <div key={text} className="flex items-center gap-4">
+                  { en: "Send any reference", zh: "发送任意参考信息" },
+                  { en: "We verify exact packaging", zh: "确认准确包装与品牌" },
+                  { en: "Receive one combined quote", zh: "收到一份合并报价" },
+                ].map((step, index) => (
+                  <div key={step.en} className="flex items-center gap-4">
                     <span className="grid size-8 shrink-0 place-items-center border border-primary text-xs font-bold text-primary">
                       0{index + 1}
                     </span>
-                    <span className="text-sm font-semibold">
-                      {lang === "en"
-                        ? text
-                        : ["发送任意参考信息", "确认准确包装与品牌", "收到一份合并报价"][index]}
-                    </span>
+                    <span className="text-sm font-semibold">{step[lang]}</span>
                   </div>
                 ))}
               </div>
@@ -972,7 +972,7 @@ function MarketPage() {
                                 </div>
                               </div>
                               <p className="text-sm font-bold">
-                                {t.birr} {(product.price * cart[product.id]).toLocaleString()}
+                                {t.birr} {(product.price * (cart[product.id] ?? 0)).toLocaleString()}
                               </p>
                             </div>
                           ))}
