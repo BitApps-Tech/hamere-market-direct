@@ -1,10 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowRight,
   Check,
   ChevronRight,
-  Clock3,
   Globe2,
   ImagePlus,
   MapPin,
@@ -22,15 +21,15 @@ import {
 } from "lucide-react";
 
 import heroImage from "@/assets/hamere-market-hero.jpg";
-import bokChoyImage from "@/assets/product-bok-choy.jpg";
-import chopsticksImage from "@/assets/product-chopsticks.jpg";
-import chiliCrispImage from "@/assets/product-chili-crisp.jpg";
-import dumplingsImage from "@/assets/product-dumplings.jpg";
-import riceImage from "@/assets/product-jasmine-rice.jpg";
-import sodaImage from "@/assets/product-lychee-soda.jpg";
-import seaweedImage from "@/assets/product-seaweed.jpg";
-import soySauceImage from "@/assets/product-soy-sauce.jpg";
+import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
+import {
+  categoryKeys,
+  featuredProducts,
+  products,
+  type Category,
+  type Language,
+} from "@/data/products";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,18 +55,6 @@ export const Route = createFileRoute("/")({
   component: MarketPage,
 });
 
-type Language = "en" | "zh";
-type Category = "all" | "produce" | "pantry" | "snacks" | "frozen" | "household";
-type Product = {
-  id: number;
-  en: string;
-  zh: string;
-  category: Exclude<Category, "all">;
-  price: number;
-  unit: string;
-  stock: "stock" | "preorder";
-  image: string;
-};
 type Cart = Record<number, number>;
 type SourceRequest = {
   id: number;
@@ -78,89 +65,6 @@ type SourceRequest = {
   imageName: string;
   imageUrl: string;
 };
-
-const products: Product[] = [
-  {
-    id: 1,
-    en: "Shanghai Bok Choy",
-    zh: "上海青",
-    category: "produce",
-    price: 180,
-    unit: "500g",
-    stock: "stock",
-    image: bokChoyImage,
-  },
-  {
-    id: 2,
-    en: "Premium Light Soy Sauce",
-    zh: "特级生抽",
-    category: "pantry",
-    price: 420,
-    unit: "500ml",
-    stock: "stock",
-    image: soySauceImage,
-  },
-  {
-    id: 3,
-    en: "Roasted Seaweed Crisps",
-    zh: "烤海苔",
-    category: "snacks",
-    price: 260,
-    unit: "12 pack",
-    stock: "stock",
-    image: seaweedImage,
-  },
-  {
-    id: 4,
-    en: "Pork & Chive Dumplings",
-    zh: "猪肉韭菜水饺",
-    category: "frozen",
-    price: 680,
-    unit: "700g",
-    stock: "preorder",
-    image: dumplingsImage,
-  },
-  {
-    id: 5,
-    en: "Sichuan Chili Crisp",
-    zh: "四川香辣脆",
-    category: "pantry",
-    price: 480,
-    unit: "280g",
-    stock: "stock",
-    image: chiliCrispImage,
-  },
-  {
-    id: 6,
-    en: "Fragrant Jasmine Rice",
-    zh: "茉莉香米",
-    category: "pantry",
-    price: 1250,
-    unit: "5kg",
-    stock: "stock",
-    image: riceImage,
-  },
-  {
-    id: 7,
-    en: "Sparkling Lychee Soda",
-    zh: "荔枝汽水",
-    category: "snacks",
-    price: 390,
-    unit: "3 bottles",
-    stock: "preorder",
-    image: sodaImage,
-  },
-  {
-    id: 8,
-    en: "Bamboo Chopstick Set",
-    zh: "竹筷套装",
-    category: "household",
-    price: 520,
-    unit: "5 pairs",
-    stock: "stock",
-    image: chopsticksImage,
-  },
-];
 
 const copy = {
   en: {
@@ -179,6 +83,7 @@ const copy = {
     catalogTitle: "Everyday essentials, chosen well.",
     catalogText:
       "A considered selection for home kitchens, restaurants, and the tastes you know by heart.",
+    seeMore: "See more products",
     categories: [
       "All goods",
       "Fresh produce",
@@ -257,6 +162,7 @@ const copy = {
     catalogEyebrow: "市场精选",
     catalogTitle: "日常所需，样样用心。",
     catalogText: "为家庭厨房、餐厅与熟悉的家乡味道，甄选可靠好物。",
+    seeMore: "查看更多商品",
     categories: ["全部商品", "新鲜蔬菜", "调料干货", "零食饮料", "冷冻食品", "生活用品"],
     add: "加入",
     added: "已加入",
@@ -313,7 +219,6 @@ const copy = {
   },
 };
 
-const categoryKeys: Category[] = ["all", "produce", "pantry", "snacks", "frozen", "household"];
 const navTargets = ["catalog", "sourcing", "story", "contact"];
 
 function MarketPage() {
@@ -336,7 +241,7 @@ function MarketPage() {
     imageUrl: "",
   });
   const t = copy[lang];
-  const filtered = products.filter(
+  const filtered = featuredProducts.filter(
     (product) => category === "all" || product.category === category,
   );
   const itemCount = Object.values(cart).reduce((sum, qty) => sum + qty, 0) + requests.length;
@@ -645,45 +550,23 @@ function MarketPage() {
             </div>
             <div className="mt-8 grid grid-cols-1 gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
               {filtered.map((product) => (
-                <article key={product.id} className="group">
-                  <div className="relative aspect-square overflow-hidden bg-secondary">
-                    <img
-                      src={product.image}
-                      alt={`${product.en} / ${product.zh}`}
-                      loading="lazy"
-                      width={816}
-                      height={816}
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
-                    <span
-                      className={`absolute left-3 top-3 px-2.5 py-1 text-[10px] font-bold uppercase ${product.stock === "stock" ? "bg-jade text-jade-foreground" : "bg-card text-primary"}`}
-                    >
-                      {product.stock === "stock" ? t.stock : t.preorder}
-                    </span>
-                  </div>
-                  <div className="mt-4 flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-sm font-bold">{product[lang]}</h3>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {lang === "en" ? product.zh : product.en} · {product.unit}
-                      </p>
-                    </div>
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant={cart[product.id] ? "default" : "outline"}
-                      onClick={() => addProduct(product.id)}
-                      aria-label={`${t.add} ${product[lang]}`}
-                      title={`${t.add} ${product[lang]}`}
-                    >
-                      {cart[product.id] ? <Check /> : <Plus />}
-                    </Button>
-                  </div>
-                  <p className="mt-3 text-sm font-extrabold">
-                    {t.birr} {product.price.toLocaleString()}
-                  </p>
-                </article>
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  lang={lang}
+                  inCart={Boolean(cart[product.id])}
+                  labels={t}
+                  onAdd={addProduct}
+                />
               ))}
+            </div>
+            <div className="mt-12 flex justify-center">
+              <Button asChild size="lg" variant="outline" className="h-12 px-6">
+                <Link to="/products">
+                  {t.seeMore}
+                  <ArrowRight />
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
